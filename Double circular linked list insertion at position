@@ -1,0 +1,42 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node *next, *prev;
+};
+
+void insertPos(Node*& head, int val, int pos) {
+    Node* temp = new Node{val, NULL, NULL};
+
+    if (pos == 1) {
+        if (!head) {
+            head = temp;
+            head->next = head->prev = head;
+            return;
+        }
+        Node* last = head->prev;
+        temp->next = head;
+        temp->prev = last;
+        last->next = temp;
+        head->prev = temp;
+        head = temp;
+        return;
+    }
+
+    Node* p = head;
+    for (int i = 1; i < pos - 1 && p->next != head; i++)
+        p = p->next;
+
+    temp->next = p->next;
+    temp->prev = p;
+    p->next->prev = temp;
+    p->next = temp;
+}
+
+int main() {
+    Node* head = NULL;
+    insertPos(head, 10, 1);
+    insertPos(head, 20, 2);
+    insertPos(head, 15, 2);
+}
