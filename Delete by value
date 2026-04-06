@@ -1,0 +1,29 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node *next, *prev;
+};
+
+void deleteEnd(Node*& head) {
+    if (!head) return;
+
+    if (head->next == head) {
+        delete head;
+        head = NULL;
+        return;
+    }
+
+    Node* last = head->prev;
+    Node* secondLast = last->prev;
+
+    secondLast->next = head;
+    head->prev = secondLast;
+
+    delete last;
+}
+
+int main() {
+    Node* head = NULL;
+}
