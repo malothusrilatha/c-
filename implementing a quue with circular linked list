@@ -1,0 +1,80 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* next;
+};
+
+Node* rear = NULL;
+
+// 🔹 Enqueue Operation
+void enqueue(int value) {
+    Node* newNode = new Node;
+    newNode->data = value;
+
+    if (rear == NULL) {
+        rear = newNode;
+        rear->next = rear; // circular link
+    } else {
+        newNode->next = rear->next;
+        rear->next = newNode;
+        rear = newNode;
+    }
+    cout << "Inserted: " << value << endl;
+}
+
+// 🔹 Dequeue Operation
+void dequeue() {
+    if (rear == NULL) {
+        cout << "Queue is Empty\n";
+        return;
+    }
+
+    Node* temp = rear->next; // front node
+
+    if (rear == temp) {
+        cout << "Deleted: " << temp->data << endl;
+        rear = NULL;
+    } else {
+        cout << "Deleted: " << temp->data << endl;
+        rear->next = temp->next;
+    }
+
+    delete temp;
+}
+
+// 🔹 Display Queue
+void display() {
+    if (rear == NULL) {
+        cout << "Queue is Empty\n";
+        return;
+    }
+
+    Node* temp = rear->next; // front
+
+    cout << "Queue elements: ";
+    do {
+        cout << temp->data << " ";
+        temp = temp->next;
+    } while (temp != rear->next);
+
+    cout << endl;
+}
+
+// 🔹 Main Function
+int main() {
+    enqueue(10);
+    enqueue(20);
+    enqueue(30);
+
+    display();
+
+    dequeue();
+    display();
+
+    dequeue();
+    display();
+
+    return 0;
+}
