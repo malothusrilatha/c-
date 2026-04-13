@@ -1,0 +1,38 @@
+#include <iostream>
+#include <queue>
+using namespace std;
+void enqueue(queue<int> &q, int x) {
+    q.push(x);
+}
+int dequeue(queue<int> &q) {
+    int x = q.front();
+    q.pop();
+    return x;
+}
+int reverseNum(int n) {
+    queue<int> q;
+    int r = 0;
+
+    while (n > 0) {
+        enqueue(q, n % 10);
+        n /= 10;
+    }
+
+    while (!q.empty()) {
+        r = r * 10 + dequeue(q);
+    }
+
+    return r;
+}
+void check(int n) {
+    if (n == reverseNum(n))
+        cout << "Palindrome";
+    else
+        cout << "Not Palindrome";
+}
+int main() {
+    int n;
+    cin >> n;
+    check(n);
+    return 0;
+}
