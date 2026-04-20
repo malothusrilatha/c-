@@ -1,0 +1,124 @@
+#include <iostream>
+using namespace std;
+
+struct Node {
+    int data;
+    Node* left;
+    Node* right;
+    Node(int value) : data(value), left(NULL), right(NULL) {}
+};
+
+Node* createNode(int data) {
+    return new Node(data);
+}
+
+Node* insertAtBeginning(Node* root, int data) {
+    Node* newNode = createNode(data);
+    newNode->left = root->left;
+    newNode->right = root;
+    if (root) root->left = NULL;
+    return newNode;
+}
+
+Node* insertAtEnd(Node* root, int data) {
+    if (!root) return createNode(data);
+    
+    Node* newNode = createNode(data);
+    Node* temp = root;
+    
+    while (temp->left) {
+        temp = temp->left;
+    }
+    temp->left = newNode;
+    return root;
+}
+
+Node* insertAtPosition(Node* root, int data, int positionValue) {
+    if (!root) return createNode(data);
+    
+    Node* newNode = createNode(data);
+    Node* parent = NULL;
+    Node* current = root;
+    
+    while (current && current->data != positionValue) {
+        parent = current;
+        if (data < current->data) {
+            current = current->left;
+        } else {
+            current = current->right;
+        }
+    }
+    
+    if (!current) {
+        cout << "Position " << positionValue << " not found!" << endl;
+        delete newNode;
+        return root;
+    }
+    
+    if (!current->left) {
+        current->left = newNode;
+    } else if (!current->right) {
+        current->right = newNode;
+    } else {
+        Node* temp = current->right;
+        while (temp->left) temp = temp->left;
+        temp->left = newNode;
+    }
+    return root;
+}
+
+void rootLeftRight(Node* root) {
+    if (!root) return;
+    cout << root->data << " ";
+    rootLeftRight(root->left);
+    rootLeftRight(root->right);
+}
+
+void leftRootRight(Node* root) {
+    if (!root) return;
+    leftRootRight(root->left);
+    cout << root->data << " ";
+    leftRootRight(root->right);
+}
+
+void deleteTree(Node* root) {
+    if (!root) return;
+    deleteTree(root->left);
+    deleteTree(root->right);
+    delete root;
+}
+
+int main() {
+    Node* root = createNode(50);
+    
+    cout << "Initial tree: ";
+    leftRootRight(root);
+    cout << endl;
+    
+    root = insertAtBeginning(root, 30);
+    cout << "After beginning (30): ";
+    leftRootRight(root);
+    cout << endl;
+    
+    root = insertAtEnd(root, 70);
+    cout << "After end (70): ";
+    leftRootRight(root);
+    cout << endl;
+    
+    root = insertAtPosition(root, 40, 30);
+    cout << "After position 30 (40): ";
+    leftRootRight(root);
+    cout << endl;
+    
+    root = insertAtPosition(root, 60, 50);
+    cout << "After position 50 (60): ";
+    leftRootRight(root);
+    cout << endl;
+    
+    cout << "Root-Left-Right: ";
+    rootLeftRight(root);
+    cout << endl;
+    
+    deleteTree(root);
+    return 0;
+}
